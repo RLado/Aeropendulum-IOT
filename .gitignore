@@ -1,0 +1,6 @@
+#Directories
+FlaskENV/
+WebInterface/__pycache__/
+
+#Files
+*.pyc
