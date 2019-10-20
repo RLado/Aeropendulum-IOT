@@ -10,11 +10,19 @@ from .camera_opencv import Camera
 from datetime import datetime
 import time
 import json
+#Serial comunications
+from multiprocessing import Process, Queue
+import AP_serialCom
 #Debug and test libraries
 import random
 
 
 main=Blueprint('main',__name__)
+
+#Start serial read process
+readQ=Queue(maxsize=1)
+p=Process(target=AP_serialCom.AP_read, args=(readQ,))
+p.start()
 
 @main.route('/')
 def index():
@@ -24,10 +32,13 @@ def index():
 def chart_data():
     def generate_random_data():
         while True:
+			if not queue.empty():
+	            lastRead=readQ.get()
+				lrFields=lastRead.split('|')
             json_data = json.dumps(
-                {'time': datetime.now().strftime('%H:%M:%S'), 'value': random.random() * 100, 'value2': random.random() * 100})
-            yield "data:%s\n\n"%json_data
-            time.sleep(1)
+                {'time': float(lrFields[4]), 'value': float(lrFields[0])/math.pi*180, 'value2': float(lrFields[1])/math.pi*180})
+            yield f'data:{json_data}\n\n'
+            time.sleep(0.2)
 
     return Response(generate_random_data(), mimetype='text/event-stream')
 

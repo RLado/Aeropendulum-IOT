@@ -4,6 +4,7 @@ LABEL maintainer="Ricard Lado <ricardlador@iqs.edu>"
 #Clone the repo
 WORKDIR /opt/
 RUN git clone https://github.com/Reichyga/Aeropendulum-IOT.git
+RUN git checkout SerialInt #Debug
 WORKDIR /opt/Aeropendulum-IOT/
 
 #Install dependencies

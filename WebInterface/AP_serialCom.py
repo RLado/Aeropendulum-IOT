@@ -61,7 +61,7 @@ def AP_read(out_q):
                     line = ser.readline()   # read a '\n' terminated line
                     if len(line)>0:
                         try:
-                            out_q.put(line.decode("utf-8"))
+                            out_q.put(line.decode('utf-8'))
                         except UnicodeDecodeError:
                             print('Decode Error')
                     #Check lock file, if locked stop reading
@@ -79,9 +79,9 @@ def AP_write(FC,target,P,I,D):
 
 
 #Main reads the serial port
-if __name__ == "__main__":
-    queue = Queue(maxsize=0)
-    p = Process(target=AP_read, args=(queue,))
+if __name__ == '__main__':
+    queue=Queue(maxsize=1)
+    p=Process(target=AP_read, args=(queue,))
     p.start()
 
     while True:
