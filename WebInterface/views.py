@@ -25,26 +25,24 @@ p.start()
 
 @main.route('/')
 def index():
-	return render_template('index.html')
+    return render_template('index.html')
 
 @main.route('/chart-data')
 def chart_data():
     def read_arduino_data():
         while True:
-            if not readQ.empty():
-                lastRead=readQ.get()
-                lrFields=lastRead.split('|')
-            json_data = json.dumps(
-                {'time': float(lrFields[4]), 'value': float(lrFields[0])/math.pi*180, 'value2': float(lrFields[1])/math.pi*180})
-            yield f'data:{json_data}\n\n'
-            time.sleep(0.2)
+            try:
+                if not readQ.empty():
+                    lastRead=readQ.get()
+                    lrFields=lastRead.split('|')
+                json_data = json.dumps(
+                    {'time': float(lrFields[4]), 'value': float(lrFields[0])/math.pi*180, 'value2': float(lrFields[1])/math.pi*180})
+                yield f'data:{json_data}\n\n'
+                time.sleep(0.2)
+            except:
+                print('Error reading Arduino serial data')
 
-    try:
-        arduinoData=read_arduino_data()
-    except:
-        print('Error reading data')
-
-    return Response(arduinoData, mimetype='text/event-stream')
+    return Response(read_arduino_data(), mimetype='text/event-stream')
 
 #Video streaming generator function.
 def gen(camera):
