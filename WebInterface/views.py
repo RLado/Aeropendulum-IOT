@@ -12,9 +12,8 @@ import time
 import json
 #Serial comunications
 from multiprocessing import Process, Queue
-import AP_serialCom
-#Debug and test libraries
-import random
+from WebInterface import AP_serialCom
+import math
 
 
 main=Blueprint('main',__name__)
@@ -30,17 +29,22 @@ def index():
 
 @main.route('/chart-data')
 def chart_data():
-    def generate_random_data():
+    def read_arduino_data():
         while True:
-			if not queue.empty():
-	            lastRead=readQ.get()
-				lrFields=lastRead.split('|')
+            if not readQ.empty():
+                lastRead=readQ.get()
+                lrFields=lastRead.split('|')
             json_data = json.dumps(
                 {'time': float(lrFields[4]), 'value': float(lrFields[0])/math.pi*180, 'value2': float(lrFields[1])/math.pi*180})
             yield f'data:{json_data}\n\n'
             time.sleep(0.2)
 
-    return Response(generate_random_data(), mimetype='text/event-stream')
+    try:
+        arduinoData=read_arduino_data()
+    except:
+        print('Error reading data')
+
+    return Response(arduinoData, mimetype='text/event-stream')
 
 #Video streaming generator function.
 def gen(camera):
