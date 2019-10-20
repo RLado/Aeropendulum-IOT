@@ -1,6 +1,6 @@
 #views.py
 #Flask app for the Aeropendulum_IOT project
-#8th August 2019
+#8th October 2019
 #Ricard Lado <ricardlador@iqs.edu>
 
 from flask import Blueprint, render_template, Response
