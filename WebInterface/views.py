@@ -18,14 +18,14 @@ import math
 
 main=Blueprint('main',__name__)
 
+@main.route('/')
+def index():
+    return render_template('index.html')
+
 #Start serial read process
 readQ=Queue(maxsize=1)
 p=Process(target=AP_serialCom.AP_read, args=(readQ,))
 p.start()
-
-@main.route('/')
-def index():
-    return render_template('index.html')
 
 @main.route('/chart-data')
 def chart_data():
