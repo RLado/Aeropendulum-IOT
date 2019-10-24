@@ -29,6 +29,9 @@ docker exec -it Aeropendulum-IOT bash
 ```
 ---
 ## How to change AP parameters while the Web Interface is running
+Make sure **auto-reset** has been **disabled** on the Arduino, you can do that by placing a 120 ohm resistor in the headers between 5v and reset.
+
+Then do:
 ```bash
 docker exec -it Aeropendulum-IOT bash
 export AP_ARDUINO_SOURCE=/dev/ttyUSB0 #Change the device if necessary
@@ -37,7 +40,7 @@ python WebInterface/AP_command.py 1 45 0.03 0.06 0 #The arguments required in or
 ---
 ## Troubleshooting
 Check if **runWI.sh** is correctly setup, and if all devices are plugged in.
- 
+
 ```bash
 export FLASK_APP=WebInterface
 export FLASK_DEBUG=1
