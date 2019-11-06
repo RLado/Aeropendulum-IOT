@@ -23,7 +23,7 @@ def index():
     return render_template('index.html')
 
 #Start serial read process
-readQ=Queue(maxsize=1)
+readQ=Queue(maxsize=2)
 p=Process(target=AP_serialCom.AP_read, args=(readQ,))
 p.start()
 

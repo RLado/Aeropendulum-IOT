@@ -61,6 +61,8 @@ def AP_read(out_q):
                     line = ser.readline()   # read a '\n' terminated line
                     if len(line)>0:
                         try:
+                            if out_q.full():
+                                out_q.get()
                             out_q.put(line.decode('utf-8'))
                         except UnicodeDecodeError:
                             print('Decode Error')
