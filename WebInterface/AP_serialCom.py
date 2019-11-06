@@ -5,7 +5,7 @@
 
 import os
 import serial
-from multiprocessing import Process, Queue
+from multiprocessing import Process
 import math
 import time
 
@@ -34,6 +34,9 @@ port=os.environ['AP_ARDUINO_SOURCE']
 #Create lock file for the serial port
 with open('/dev/shm/SerLockAP.lock','w') as lockfile:
     lockfile.write('0')
+#Create the aeropendulum data comfile
+with open('/dev/shm/AP_Serial.ap','w') as comfile:
+    comfile.write('0.00 | 0.00 | 0.00 | 1000.00 | 0.00 |')
 
 #Create lock and unlock functions
 def lock():
@@ -81,12 +84,11 @@ def AP_write(FC,target,P,I,D):
 
 #Main reads the serial port
 if __name__ == '__main__':
-    queue=Queue(maxsize=1)
-    p=Process(target=AP_read, args=(queue,))
+    p=Process(target=AP_read, args=())
     p.start()
 
     while True:
-        if not queue.empty():
-            print(queue.get())
+        with open('/dev/shm/AP_Serial.ap','r') as comfile:
+            print(comfile.read())
 
     p.terminate()

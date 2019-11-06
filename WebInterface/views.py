@@ -11,7 +11,7 @@ from datetime import datetime
 import time
 import json
 #Serial comunications
-from multiprocessing import Process, Queue
+from multiprocessing import Process
 from WebInterface import AP_serialCom
 import math
 
