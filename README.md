@@ -29,7 +29,7 @@ docker exec -it Aeropendulum-IOT bash
 ```
 ---
 ## How to change AP parameters while the Web Interface is running
-Make sure **auto-reset** has been **disabled** on the Arduino, you can do that by placing a 120 ohm resistor in the headers between 5v and reset.
+Make sure **auto-reset** has been **disabled** on the Arduino, you can do that by placing a 120 ohm resistor in the headers between 5v and reset. [[Source](https://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection/)]
 
 Then do:
 ```bash
