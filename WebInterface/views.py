@@ -23,8 +23,7 @@ def index():
     return render_template('index.html')
 
 #Start serial read process
-readQ=Queue(maxsize=2)
-p=Process(target=AP_serialCom.AP_read, args=(readQ,))
+p=Process(target=AP_serialCom.AP_read, args=())
 p.start()
 
 @main.route('/chart-data')
@@ -32,8 +31,8 @@ def chart_data():
     def read_arduino_data():
         while True:
             try:
-                if not readQ.empty():
-                    lastRead=readQ.get()
+                with open('/dev/shm/AP_Serial.ap','r') as comfile:
+                    lastRead=comfile.read()
                     lrFields=lastRead.split('|')
                 json_data = json.dumps(
                     {'time': float(lrFields[4]), 'value': float(lrFields[0])/math.pi*180, 'value2': float(lrFields[1])/math.pi*180})

@@ -53,7 +53,7 @@ def islocked():
             return False
 
 #Read and write serial funcions that can be used simultaneously
-def AP_read(out_q):
+def AP_read():
     while True: #loop around while locked
         if not islocked():
             with serial.Serial(port, 115200, timeout=1) as ser:
@@ -61,9 +61,8 @@ def AP_read(out_q):
                     line = ser.readline()   # read a '\n' terminated line
                     if len(line)>0:
                         try:
-                            if out_q.full():
-                                out_q.get()
-                            out_q.put(line.decode('utf-8'))
+                            with open('/dev/shm/AP_Serial.ap','w') as comfile:
+                                comfile.write(line.decode('utf-8'))
                         except UnicodeDecodeError:
                             print('Decode Error')
                     #Check lock file, if locked stop reading
